@@ -13,11 +13,27 @@ impl Bucketizer {
         }
     }
     fn bucket(self, min: Option<f64>, max: Option<f64>, value: f64) ->Self {   
-        self
+        let mut new=self;
+        new.buckets.push((min,max,value));
+        new
     }
 
     fn bucketize(&self, input: f64) -> Option<f64> {
-        None
+        for bucket in &self.buckets {
+            match *bucket {
+                (None,None, val) => return Some(val),
+                (Some(min),None, val) => {
+                    if input >= min { return Some(val)} 
+                },
+                (None,Some(max),val) => {
+                    if input < max { return Some(val)}
+                },
+                (Some(min),Some(max),val) => {
+                    if input >= min && input < max { return Some(val)}
+                }
+            } 
+        }
+        return None;
     }
 }
 
