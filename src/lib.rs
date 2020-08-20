@@ -12,7 +12,8 @@ impl Bucketizer {
             buckets: Vec::new()
         }
     }
-    fn add_bucket(&mut self, min: Option<f64>, max: Option<f64>, value: f64) {   
+    fn bucket(self, min: Option<f64>, max: Option<f64>, value: f64) ->Self {   
+        self
     }
 
     fn bucketize(&self, input: f64) -> Option<f64> {
