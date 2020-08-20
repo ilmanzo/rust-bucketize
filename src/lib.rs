@@ -28,19 +28,38 @@ mod tests {
 
     #[test]
     fn single_bucket_middle_values() {
-        let mut bucketizer = Bucketizer::new();
-        bucketizer.add_bucket(Some(0.0), Some(1.0), 0.5);
+        let bucketizer = Bucketizer::new()
+            .bucket(Some(0.0), Some(1.0), 0.5);
         assert_eq!(bucketizer.bucketize(0.1),Some(0.5));
         assert_eq!(bucketizer.bucketize(999.999),None);
     }
 
     #[test]
     fn single_bucket_end_values() {
-        let mut bucketizer = Bucketizer::new();
-        bucketizer.add_bucket(Some(0.0), Some(1.0), 0.5);
+        let bucketizer = Bucketizer::new()
+            .bucket(Some(0.0), Some(1.0), 0.5);
         assert_eq!(bucketizer.bucketize(0.0), Some(0.5));
         assert_eq!(bucketizer.bucketize(1.0), None);
     }
 
+    #[test]
+    fn multiple_buckets_closed_ends() {
+        let b=Bucketizer::new()
+            .bucket(Some(-1.0),Some(0.0),-0.5)
+            .bucket(Some(0.0),Some(1.0),0.5);
+        assert_eq!(b.bucketize(0.0),Some(0.5));
+        assert_eq!(b.bucketize(-0.7),Some(-0.5));
+        assert_eq!(b.bucketize(999.99),None);
+    }
+
+    #[test]
+    fn multiple_buckets_open_ends() {
+        let b=Bucketizer::new()
+            .bucket(Some(0.0),Some(1.0),0.5)
+            .bucket(Some(1.0),None,1.5);
+        assert_eq!(b.bucketize(0.0),Some(0.5));
+        assert_eq!(b.bucketize(-0.7),None);
+        assert_eq!(b.bucketize(999.99),Some(1.5));
+    }
 }
 
