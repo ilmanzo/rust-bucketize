@@ -19,3 +19,17 @@ impl Bucketizer {
         None
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::Bucketizer;
+
+    #[test]
+    fn single_bucket_middle_values() {
+        let mut bucketizer = Bucketizer::new();
+        bucketizer.add_bucket(Some(0.0), Some(1.0), 0.5);
+        assert_eq!(bucketizer.bucketize(0.1),Some(0.5));
+        assert_eq!(bucketizer.bucketize(999.999),None);
+    }
+}
